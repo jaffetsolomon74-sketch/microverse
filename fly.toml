@@ -1,0 +1,30 @@
+# fly.toml - Fly.io configuration for Microswab AI
+app = "microswab-ai"
+primary_region = "lhr"
+
+[build]
+  # Use Dockerfile for deployment
+  dockerfile = "./Dockerfile"
+
+[env]
+  # Your environment variables go here
+  # Make sure to set OPENAI_API_KEY in Fly.io dashboard secrets
+  PORT = "5001"
+  NODE_ENV = "production"
+
+[http_service]
+  internal_port = 5001
+  force_https = true
+
+# Optional: autoscaling config
+[services]
+  http_checks = []
+  processes = ["app"]
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+  max_machines_running = 2
+
+[[statics]]
+  guest_path = "/app/public"
+  url_prefix = "/"
